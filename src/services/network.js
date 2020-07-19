@@ -1,3 +1,9 @@
+/**
+ * An utility module to make network requests
+ * Provides two methods:
+ *    - fetchPoints: fetches all the points from the free JSON server
+ *    - submitPoints: mimics a fake post request to the server
+ */
 import axios from 'axios' 
 
 export function fetchPoints() {
