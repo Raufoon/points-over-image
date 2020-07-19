@@ -50,22 +50,24 @@ function App() {
     }
   }, [getRelativeXY, draggedElem, dragPoint])
 
-  // Submits the changed points to the server (WARNING: the free JSON server fails to store the data)
+  // Submits the changed points to the server
   const submitNewPoints = useMemo(function() {
     return function() {
       console.log('Submitting', getModifiedPoints())
-      submitPoints(getModifiedPoints())
+      submitPoints(getModifiedPoints()).then(() => window.alert("Points are submitted successfully!!"))
     }
   }, [getModifiedPoints])
 
   // Render the views
   return (
     <div className="App"> 
-      <label>Drag the points to adjust them</label>
+      {
+        points? <label>Drag the points to adjust them</label>:<span>Loading points....</span>
+      }
      
       <div id="canvasContainer">
         <img id="canvasBackground" src={sampleImage} alt="canvas background"/>
-        
+
         <canvas 
           id="canvas" 
           onMouseUp={dropPointOnCanvas} 

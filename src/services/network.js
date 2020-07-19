@@ -2,12 +2,14 @@
  * An utility module to make network requests
  * Provides two methods:
  *    - fetchPoints: fetches all the points from the free JSON server
- *    - submitPoints: mimics a fake post request to the server
+ *    - submitPoints: saves the points to the server
  */
 import axios from 'axios' 
 
+const SERVER = `https://us-central1-lllivepolll.cloudfunctions.net/server`
+
 export function fetchPoints() {
-  return axios.get('https://my-json-server.typicode.com/raufoon/points-data/points')
+  return axios.get(`${SERVER}/dummy`)
     .then(response => response.data.map(point => {
       return {
         x: point.x, 
@@ -17,7 +19,7 @@ export function fetchPoints() {
 }
 
 export function submitPoints(points) {
-  return axios.post('https://my-json-server.typicode.com/raufoon/points-data/points', {
+  return axios.post(`${SERVER}/dummy`, {
     points: points.map((point, id) => ({
       ...point, 
       id
