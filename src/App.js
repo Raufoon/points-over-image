@@ -3,10 +3,11 @@ import usePointsData from './hooks/usePointsData';
 import useCanvas from './hooks/useCanvas';
 import sampleImage from './assets/sample.jpg'
 import './App.css';
+import { submitPoints } from './services/network';
 
 function App() {
   const points = usePointsData()
-  const [canvas, draggedElem, selectPoint, dragPoint, dropPoint] = useCanvas(points)
+  const [canvas, draggedElem, getModifiedPoints, selectPoint, dragPoint, dropPoint] = useCanvas(points)
 
   const getRelativeXY = useMemo(function() {
     return function(mouse) {
@@ -40,6 +41,14 @@ function App() {
     }
   }, [getRelativeXY, draggedElem, dragPoint])
 
+  const submitNewPoints = useMemo(function() {
+    return function() {
+      const newPoints = getModifiedPoints()
+      console.log('Submitting', newPoints)
+      submitPoints(newPoints)
+    }
+  }, [getModifiedPoints])
+
   return (
     <div className="App">
       <label>Drag the points to adjust them</label>
@@ -54,7 +63,7 @@ function App() {
           onMouseDown={selectPointOnCanvas}></canvas>
       </div>
       
-      <button>Upload New Points</button>
+      <button onClick={submitNewPoints}>Upload New Points</button>
     </div>
   );
 }

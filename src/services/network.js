@@ -1,7 +1,16 @@
 import axios from 'axios' 
 
-const DATA_SERVER = 'https://my-json-server.typicode.com/raufoon/points-data/points'
-
 export function fetchPoints() {
-  return axios.get(DATA_SERVER).then(response => response.data)
+  return axios.get('https://my-json-server.typicode.com/raufoon/points-data/points')
+    .then(response => response.data)
+}
+
+export function submitPoints(points) {
+  return axios.post('https://my-json-server.typicode.com/raufoon/points-data/points', {
+    points
+  }, {
+    headers: {
+      "Content-type": "application/json; charset=UTF-8"
+    }
+  })
 }

@@ -26,16 +26,6 @@ export default function useCanvas(initialPoints) {
       pointsRef.current.forEach((({x, y}) => drawPoint(x, y)))
     }
   }, [drawPoint, pointsRef])
-
-  /*
-  const erasePoint = useMemo(function() {
-    return function(x, y) {
-      const context = canvas.getContext('2d')
-      context.fillStyle = "#000"
-      context.clearRect(x-(DOT*3), y-(DOT*3), (DOT*6), (DOT*6))
-    }
-  }, [])
-  */
   
   useEffect(function initCanvas() {
     canvas = document.getElementById('canvas')
@@ -76,14 +66,20 @@ export default function useCanvas(initialPoints) {
   }, [draggedElem, drawAllPoints])
 
   const dropPoint = useMemo(function() {
-    return function(x, y) {
+    return function() {
       if (draggedElem) {
         drawAllPoints()
-        console.log("Dropped", pointsRef.current)
+        console.log("DROPPED! Current state of points:", pointsRef.current)
       }
       setDraggedElem(null)
     }
   }, [draggedElem, setDraggedElem, drawAllPoints])
 
-  return [canvas, draggedElem, selectPoint, dragPoint, dropPoint]
+  const getModifiedPoints = useMemo(function() {
+    return function() {
+      return pointsRef.current.slice()
+    }
+  }, [pointsRef])
+
+  return [canvas, draggedElem, getModifiedPoints, selectPoint, dragPoint, dropPoint]
 }
