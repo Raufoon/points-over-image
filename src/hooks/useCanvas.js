@@ -8,6 +8,22 @@ export default function useCanvas(initialPoints) {
   const DOT = 4
   const HDOT = 2
 
+  const showPointTooltip = useMemo(function() {
+    return function(x, y) {
+      const tooltip = document.getElementById('pointTooltip')
+      tooltip.innerHTML = `(${x}, ${y})`
+      tooltip.style.top = (y + 10) + 'px';
+      tooltip.style.left = (x + 10) + 'px';
+    }
+  }, [])
+
+  const hidePointTooltip = useMemo(function() {
+    return function() {
+      const tooltip = document.getElementById('pointTooltip')
+      tooltip.innerHTML = ``
+    }
+  }, [])
+
   const drawPoint = useMemo(function() {
     return function(x, y) {
       const context = canvas.getContext('2d')
@@ -49,31 +65,36 @@ export default function useCanvas(initialPoints) {
       })
 
       if (selectedPoints.length > 0) {
-        setDraggedElem(selectedPoints[0])
-        console.log("SELECT", selectedPoints[0].x, selectedPoints[0].y)
+        const selected = selectedPoints[0]
+        setDraggedElem(selected)
+        const {x, y} = selected
+        showPointTooltip(x, y)
+        console.log("SELECT", x, y)
       }
     }
-  }, [pointsRef, setDraggedElem])
+  }, [pointsRef, setDraggedElem, showPointTooltip])
 
   const dragPoint = useMemo(function() {
     return function(x, y) {
       if (draggedElem) {
         draggedElem.x = x
         draggedElem.y = y
+        showPointTooltip(x, y)
         drawAllPoints()
       }
     }
-  }, [draggedElem, drawAllPoints])
+  }, [draggedElem, drawAllPoints, showPointTooltip])
 
   const dropPoint = useMemo(function() {
     return function() {
       if (draggedElem) {
         drawAllPoints()
+        hidePointTooltip()
         console.log("DROPPED! Current state of points:", pointsRef.current)
       }
       setDraggedElem(null)
     }
-  }, [draggedElem, setDraggedElem, drawAllPoints])
+  }, [draggedElem, setDraggedElem, drawAllPoints, hidePointTooltip])
 
   const getModifiedPoints = useMemo(function() {
     return function() {

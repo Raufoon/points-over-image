@@ -43,14 +43,13 @@ function App() {
 
   const submitNewPoints = useMemo(function() {
     return function() {
-      const newPoints = getModifiedPoints()
-      console.log('Submitting', newPoints)
-      submitPoints(newPoints)
+      console.log('Submitting', getModifiedPoints())
+      submitPoints(getModifiedPoints())
     }
   }, [getModifiedPoints])
 
   return (
-    <div className="App">
+    <div className="App"> 
       <label>Drag the points to adjust them</label>
      
       <div id="canvasContainer">
@@ -61,6 +60,8 @@ function App() {
           onMouseUp={dropPointOnCanvas} 
           onMouseMove={dragPointOnCanvas}
           onMouseDown={selectPointOnCanvas}></canvas>
+
+        <div id="pointTooltip"></div>
       </div>
       
       <button onClick={submitNewPoints}>Upload New Points</button>
