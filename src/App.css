@@ -17,6 +17,7 @@
 
 .App #canvasContainer img {
   height: 70vh;
+  border: 1px solid gray;
 }
 
 .App #canvas{
