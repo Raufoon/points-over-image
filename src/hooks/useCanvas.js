@@ -34,7 +34,7 @@ export default function useCanvas(initialPoints) {
   }, [])
 
   // Draw a Point at position (x,y) 
-  const drawPointSmoothly = useMemo(function() {
+  const drawPoint = useMemo(function() {
     return function(x, y) {
       const context = canvas.getContext('2d')
       context.fillStyle = "#000"
@@ -46,20 +46,20 @@ export default function useCanvas(initialPoints) {
   }, [])
 
   // Draw a Point at position (x,y) at NEXT AVAILABLE FRAME
-  const drawPoint = useMemo(function() {
+  const drawPointSmoothly = useMemo(function() {
     return function(x, y) {
-      window.requestAnimationFrame(() => drawPointSmoothly(x, y))
+      window.requestAnimationFrame(() => drawPoint(x, y))
     }
-  }, [drawPointSmoothly])
+  }, [drawPoint])
 
   // Draws all the points on the canvas after clearing the canvas
   const drawAllPoints = useMemo(function() {
     return function() {
       const context = canvas.getContext('2d')
       context.clearRect(0, 0, canvas.width, canvas.height)
-      pointsRef.current.forEach((({x, y}) => drawPoint(x, y)))
+      pointsRef.current.forEach((({x, y}) => drawPointSmoothly(x, y)))
     }
-  }, [drawPoint, pointsRef])
+  }, [drawPointSmoothly, pointsRef])
   
   // A React side effect to initialize the canvas based on the background image size
   // Also draws the initial points on the canvas
