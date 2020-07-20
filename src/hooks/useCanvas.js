@@ -34,7 +34,7 @@ export default function useCanvas(initialPoints) {
   }, [])
 
   // Draw a Point at position (x,y) 
-  const drawPoint = useMemo(function() {
+  const drawPointSmoothly = useMemo(function() {
     return function(x, y) {
       const context = canvas.getContext('2d')
       context.fillStyle = "#000"
@@ -44,6 +44,13 @@ export default function useCanvas(initialPoints) {
       context.stroke()
     }
   }, [])
+
+  // Draw a Point at position (x,y) at NEXT AVAILABLE FRAME
+  const drawPoint = useMemo(function() {
+    return function(x, y) {
+      window.requestAnimationFrame(() => drawPointSmoothly(x, y))
+    }
+  }, [drawPointSmoothly])
 
   // Draws all the points on the canvas after clearing the canvas
   const drawAllPoints = useMemo(function() {

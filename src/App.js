@@ -62,7 +62,8 @@ function App() {
   return (
     <div className="App"> 
       {
-        points? <label>Drag the points to adjust them</label>:<span>Loading points....</span>
+        points? <label>Drag the points to adjust them</label>
+          :<b>Loading points....</b>
       }
      
       <div id="canvasContainer">
